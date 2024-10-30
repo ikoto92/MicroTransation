@@ -24,7 +24,11 @@ namespace MicroTransation.Controllers
         }
 
         [HttpPost]
+
         public  User createUser(UserCreateDTO userDto)
+
+        public User createUser(UserCreateDTO userDto)
+
         {
             var user = new User()
             {

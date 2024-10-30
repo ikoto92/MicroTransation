@@ -21,7 +21,11 @@ namespace MicroTransation.Controllers
         }
 
         [HttpPost]
+
         public  async Task<IActionResult> SignIn (UserAuthDTO _authUser)
+
+        public IActionResult SignIn (UserAuthDTO _authUser)
+
         {
 
             if(_authUser.Email==""|| _authUser.Password == "")
@@ -33,7 +37,11 @@ namespace MicroTransation.Controllers
 
             if (user == null) 
             {
+
                 return BadRequest("L'utilisateur n'a pas été trouvé !"); 
+
+                return BadRequest("re"); 
+
             }
 
             bool validPassword = BCrypt.Net.BCrypt.Verify(_authUser.Password, user.Password);
@@ -52,7 +60,9 @@ namespace MicroTransation.Controllers
             };
 
             _appDbContext.AuthTokens.Add(token);
+
             //await _appDbContext.SaveChangesAsync();
+
            
             var guid = Guid.NewGuid().ToString();
 
