@@ -1,4 +1,6 @@
-﻿using MicroTransation.Middleware;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using MicroTransation.Middleware;
 
 namespace MicroTransation.Middleware
 {
@@ -13,8 +15,18 @@ namespace MicroTransation.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
-            Console.WriteLine("hello from middle");
-            await _next(context);
+            string token = context.Request.Headers["Authorization"].FirstOrDefault(); ;
+
+            if(token == null)
+            {
+                context.Response.StatusCode=StatusCodes.Status401Unauthorized;
+                await context.Response.WriteAsync("Unauthorized");
+                return;
+            }
+            else
+            {
+                 await _next(context);
+            }
         }
     }
 }

@@ -15,7 +15,6 @@ namespace MicroTransation.Services.Mappers
 
                 UserAuth = new UserAuthDTO
                 {
-                    //Id = token.user.Id,
                     Name = token.user.Name,
                     Email = token.user.Email,
                 }

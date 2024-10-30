@@ -20,7 +20,7 @@ namespace MicroTransation.Controllers
             _token = token;
         }
 
-        [HttpPost]
+        [HttpGet]
         public  async Task<IActionResult> SignIn (UserAuthDTO _authUser)
         {
 
@@ -52,7 +52,6 @@ namespace MicroTransation.Controllers
             };
 
             _appDbContext.AuthTokens.Add(token);
-            //await _appDbContext.SaveChangesAsync();
            
             var guid = Guid.NewGuid().ToString();
 
