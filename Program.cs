@@ -1,4 +1,10 @@
+
+using Microsoft.AspNetCore.Http;
 using MicroTransation.Data;
+using MicroTransation.Middleware;
+
+using MicroTransation.Data;
+
 using MicroTransation.Services.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+
+
+builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -25,4 +36,10 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
+
+app.UseWhen(context => !context.Request.Path.StartsWithSegments("/auth"), appBuilder => { 
+    appBuilder.UseMiddleware<AuthMiddleware>(); 
+});
+
 app.Run();

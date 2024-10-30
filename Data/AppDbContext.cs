@@ -22,5 +22,8 @@ namespace MicroTransation.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<AuthToken> AuthTokens { get; set; }
+
+        public DbSet<Item> Items { get; set; }
+
     }
 }
