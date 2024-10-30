@@ -1,5 +1,6 @@
+using Microsoft.AspNetCore.Http;
 using MicroTransation.Data;
-using MicroTransation.Middlwere;
+using MicroTransation.Middleware;
 using MicroTransation.Services.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,7 +29,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseWhen(context => !context.Request.Path.StartsWithSegments("/auth"), appBuilder => { 
-    appBuilder.UseMiddleware<AuthMiddlwere>(); 
+    appBuilder.UseMiddleware<AuthMiddleware>(); 
 });
 
 app.Run();

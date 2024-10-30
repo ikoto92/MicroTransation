@@ -1,12 +1,12 @@
-﻿using MicroTransation.Middlwere;
+﻿using MicroTransation.Middleware;
 
-namespace MicroTransation.Middlwere
+namespace MicroTransation.Middleware
 {
-    public class AuthMiddlwere
+    public class AuthMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public AuthMiddlwere (RequestDelegate next)
+        public AuthMiddleware(RequestDelegate next)
         {
             _next = next;
         }
@@ -17,12 +17,11 @@ namespace MicroTransation.Middlwere
             await _next(context);
         }
     }
-  }
+}
 public static class AuthMiddleWareExtenstions
 {
     public static IApplicationBuilder UseAuth(this IApplicationBuilder builder)
     {
-        return builder.UseMiddleware<AuthMiddlwere>();
+        return builder.UseMiddleware<AuthMiddleware>();
     }
 }
-
