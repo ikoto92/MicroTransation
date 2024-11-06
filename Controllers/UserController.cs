@@ -32,7 +32,6 @@ namespace MicroTransation.Controllers
         {
             var user = new User()
             {
-                Name = userDto.getName(),
                 Email = userDto.Email,
                 Password = userDto.Password,
 

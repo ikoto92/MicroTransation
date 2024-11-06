@@ -24,6 +24,7 @@ namespace MicroTransation.Controllers
 
         public IActionResult SignIn (UserAuthDTO _authUser)
 
+
         {
 
             if(_authUser.Email==""|| _authUser.Password == "")
@@ -58,8 +59,6 @@ namespace MicroTransation.Controllers
             };
 
             _appDbContext.AuthTokens.Add(token);
-
-            //await _appDbContext.SaveChangesAsync();
 
            
             var guid = Guid.NewGuid().ToString();
