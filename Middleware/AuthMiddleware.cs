@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using MicroTransation.Data;
 using MicroTransation.Middleware;
 
 namespace MicroTransation.Middleware
@@ -15,6 +16,8 @@ namespace MicroTransation.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
+            var db = context.RequestServices.GetService<AppDbContext>();
+
             string token = context.Request.Headers["Authorization"].FirstOrDefault(); ;
 
             if(token == null)
