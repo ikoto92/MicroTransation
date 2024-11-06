@@ -15,6 +15,7 @@ namespace MicroTransation.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
+            
             string token = context.Request.Headers["Authorization"].FirstOrDefault(); ;
 
             if(token == null)
