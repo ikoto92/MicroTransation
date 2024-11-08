@@ -21,12 +21,8 @@ namespace MicroTransation.Controllers
         }
 
         [HttpPost]
-
         public IActionResult SignIn (UserAuthDTO _authUser)
-
-
         {
-
             if(_authUser.Email==""|| _authUser.Password == "")
             {
                return BadRequest("renseigner les champs");
@@ -38,8 +34,6 @@ namespace MicroTransation.Controllers
             {
 
                 return BadRequest("L'utilisateur n'a pas été trouvé !"); 
-
-                return BadRequest("re"); 
 
             }
 
@@ -59,8 +53,7 @@ namespace MicroTransation.Controllers
             };
 
             _appDbContext.AuthTokens.Add(token);
-
-           
+            
             var guid = Guid.NewGuid().ToString();
 
             return Ok(_token.GetTokenGet(token));
