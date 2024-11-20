@@ -64,7 +64,7 @@ namespace MicroTransation.Controllers
         {
             var user = new User()
             {
-                Name= userDto.Name,
+                Name = userDto.Name,
                 Email = userDto.Email,
                 Password = userDto.Password,
             };
