@@ -21,27 +21,6 @@ namespace MicroTransation.Controllers
         public User getUer(int id)
         {
             return _appDbContext.Users.FirstOrDefault((user) => user.Id == id);
-        }
-
-        [HttpPost]
-
-        public User createUser(UserCreateDTO userDto)
-
-        {
-            var user = new User()
-            {
-                Email = userDto.Email,
-                Password = userDto.Password,
-
-            };
-
-            var hashPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
-
-            var _user = _appDbContext.Users.Add(user);
-            
-            _appDbContext.SaveChanges();
-
-            return user;
-        }
+        }  
     }
 }

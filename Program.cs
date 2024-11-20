@@ -2,14 +2,12 @@
 using Microsoft.AspNetCore.Http;
 using MicroTransation.Data;
 using MicroTransation.Middleware;
-using MicroTransation.Data;
 using MicroTransation.Services.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
 builder.Services.AddControllers();
 
 var Origins = "AuthorizedApps";
@@ -25,7 +23,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: Origins,
          policy =>
          {
-             policy.WithOrigins("http://localhost:3000")
+             policy.WithOrigins("http://localhost:5173")
                .WithMethods("GET", "POST", "PUT", "DELETE", "OPTION")
               .AllowAnyHeader();
          });
@@ -46,8 +44,8 @@ app.MapControllers();
 app.UseCors(Origins);
 
 
-app.UseWhen(context => !context.Request.Path.StartsWithSegments("/auth"), appBuilder => { 
-    appBuilder.UseMiddleware<AuthMiddleware>(); 
-});
+//app.UseWhen(context => !context.Request.Path.StartsWithSegments("/auth"), appBuilder => { 
+//    appBuilder.UseMiddleware<AuthMiddleware>(); 
+//});
 
 app.Run();
