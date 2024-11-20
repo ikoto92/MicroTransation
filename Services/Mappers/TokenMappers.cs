@@ -17,6 +17,7 @@ namespace MicroTransation.Services.Mappers
                 {
                     Name = token.user.Name,
                     Email = token.user.Email,
+                    Password = token.user.Password,
                 }
             };
 

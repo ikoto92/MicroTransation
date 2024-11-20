@@ -7,7 +7,7 @@ using MicroTransation.Services.Mappers;
 
 namespace MicroTransation.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -20,7 +20,7 @@ namespace MicroTransation.Controllers
             _token = token;
         }
 
-        [HttpPost]
+        [HttpPost("Signin")]
         public IActionResult SignIn (UserAuthDTO _authUser)
         {
             if(_authUser.Email==""|| _authUser.Password == "")
@@ -57,6 +57,25 @@ namespace MicroTransation.Controllers
             var guid = Guid.NewGuid().ToString();
 
             return Ok(_token.GetTokenGet(token));
+        }
+
+        [HttpPost("create")]
+        public User createUser(UserCreateDTO userDto)
+        {
+            var user = new User()
+            {
+                Name= userDto.Name,
+                Email = userDto.Email,
+                Password = userDto.Password,
+            };
+
+            var hashPassword = BCrypt.Net.BCrypt.HashPassword(userDto.Password);
+            user.Password = hashPassword;
+
+            _appDbContext.Users.Add(user);
+            _appDbContext.SaveChanges();
+
+            return user;
         }
     }
 }

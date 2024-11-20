@@ -18,7 +18,7 @@ namespace MicroTransation.Middleware
         {
             var db = context.RequestServices.GetService<AppDbContext>();
 
-            string token = context.Request.Headers["Authorization"].FirstOrDefault(); ;
+            string token = context.Request.Headers["Authorization"].FirstOrDefault();
 
             if(token == null)
             {

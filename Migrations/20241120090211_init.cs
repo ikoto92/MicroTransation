@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -11,6 +12,20 @@ namespace MicroTransation.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Items",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    price = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Items", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
@@ -32,8 +47,8 @@ namespace MicroTransation.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    emissionDate = table.Column<string>(type: "text", nullable: false),
-                    expirationDate = table.Column<string>(type: "text", nullable: false),
+                    emissionDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    expirationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     token = table.Column<string>(type: "text", nullable: false),
                     userId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -59,6 +74,9 @@ namespace MicroTransation.Migrations
         {
             migrationBuilder.DropTable(
                 name: "AuthTokens");
+
+            migrationBuilder.DropTable(
+                name: "Items");
 
             migrationBuilder.DropTable(
                 name: "Users");

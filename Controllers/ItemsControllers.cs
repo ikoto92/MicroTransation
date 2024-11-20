@@ -17,7 +17,6 @@ namespace MicroTransation.Controllers
         }
 
         [HttpGet]
-
         public IEnumerable<Item> GetAllItem ()
         {
             return _appDbContext.Items;
