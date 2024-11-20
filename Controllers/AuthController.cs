@@ -21,42 +21,39 @@ namespace MicroTransation.Controllers
         }
 
         [HttpPost("Signin")]
-        public IActionResult SignIn (UserAuthDTO _authUser)
+        public async Task<IActionResult> SignIn (UserAuthDTO _authUser)
         {
-            if(_authUser.Email==""|| _authUser.Password == "")
+            if (_authUser.Email == "" || _authUser.Password == "")
             {
-               return BadRequest("renseigner les champs");
-            }
-           
-            var user = _appDbContext.Users.FirstOrDefault(user => user.Email == _authUser.Email);
-
-            if (user == null) 
-            {
-
-                return BadRequest("L'utilisateur n'a pas été trouvé !"); 
-
+                return BadRequest("Renseignez tout les champs");
             }
 
-            bool validPassword = BCrypt.Net.BCrypt.Verify(_authUser.Password, user.Password);
+            var _user = _appDbContext.Users.FirstOrDefault(user => user.Email == _authUser.Email);
+            
+            if (_user == null)
+            {
+                return BadRequest("L'utilisateur n'as pas été trouvé");
+            }
+
+            bool validPassword = BCrypt.Net.BCrypt.Verify(_authUser.Password, _user.Password);
 
             if (!validPassword)
             {
-                throw new Exception("mot de passe erronné");
-            };
+                return Unauthorized("Mot de passe ou nom d'utilisateur érroné");
+            }
 
             var token = new AuthToken
             {
-                emissionDate = DateTime.Now,
-                expirationDate = DateTime.Now.AddDays(3),
+                emissionDate = DateTime.UtcNow,
+                expirationDate = DateTime.UtcNow.AddDays(3),
                 token = Guid.NewGuid().ToString(),
-                user = user,
+                user = _user,
             };
 
             _appDbContext.AuthTokens.Add(token);
-            
-            var guid = Guid.NewGuid().ToString();
+            await _appDbContext.SaveChangesAsync();
 
-            return Ok(_token.GetTokenGet(token));
+            return Ok(token);
         }
 
         [HttpPost("create")]
@@ -64,7 +61,7 @@ namespace MicroTransation.Controllers
         {
             var user = new User()
             {
-                Name= userDto.Name,
+                Name = userDto.Name,
                 Email = userDto.Email,
                 Password = userDto.Password,
             };
