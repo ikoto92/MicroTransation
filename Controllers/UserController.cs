@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using MicroTransation.Data;
 using MicroTransation.DTOs;
 using MicroTransation.Models;
+using MicroTransation.Services.Mappers;
+using MicroTransation.Repositories;
 
 namespace MicroTransation.Controllers
 {
@@ -10,17 +12,35 @@ namespace MicroTransation.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly AppDbContext _appDbContext;
+        private readonly IRepository<User> _userRepository;
 
-        public UserController(AppDbContext appDbContext)
+        public UserController(IRepository<User> userRepository)
         {
-            _appDbContext = appDbContext;
+            _userRepository = userRepository;
         }
 
         [HttpGet]
-        public User getUer(int id)
+        public async Task<IActionResult> GetAllUser()
         {
-            return _appDbContext.Users.FirstOrDefault((user) => user.Id == id);
-        }  
+            return Ok(await _userRepository.GetAll());
+        } 
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            if (id < 0)
+            {
+                return BadRequest();
+            }
+
+            var user = await _userRepository.GetById(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
     }
 }

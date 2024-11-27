@@ -4,6 +4,7 @@ using MicroTransation.Models;
 using MicroTransation.Data;
 using MicroTransation.DTOs;
 using MicroTransation.Services.Mappers;
+using MicroTransation.Repositories;
 
 namespace MicroTransation.Controllers
 {
@@ -11,68 +12,88 @@ namespace MicroTransation.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly AppDbContext _appDbContext;
+        private readonly IRepository<User> _userRepository;
         private readonly TokenMappers _token;
 
-        public AuthController(AppDbContext appDbContext, TokenMappers token)
+        public AuthController(IRepository<User> userRepository, TokenMappers token)
         {
-            _appDbContext = appDbContext;
+            _userRepository = userRepository;
             _token = token;
         }
 
+
         [HttpPost("Signin")]
-        public async Task<IActionResult> SignIn (UserAuthDTO _authUser)
+        public async Task<IActionResult> SignIn(UserAuthDTO _authUser)
         {
-            if (_authUser.Email == "" || _authUser.Password == "")
+            try
             {
-                return BadRequest("Renseignez tout les champs");
+                
+                if (string.IsNullOrWhiteSpace(_authUser.Email) || string.IsNullOrWhiteSpace(_authUser.Password))
+                {
+                    return BadRequest("Renseignez tous les champs.");
+                }
+
+                var user = _userRepository.GetAll()
+                                          .Result
+                                          .FirstOrDefault(u => u.Email == _authUser.Email);
+
+                if (user == null)
+                {
+                    return BadRequest("L'utilisateur n'a pas été trouvé.");
+                }
+
+                // Vérification du mot de passe
+                bool validPassword = BCrypt.Net.BCrypt.Verify(_authUser.Password, user.Password);
+                if (!validPassword)
+                {
+                    return Unauthorized("Mot de passe ou nom d'utilisateur erroné.");
+                }
+          
+                var token = new AuthToken
+                {
+                    emissionDate = DateTime.UtcNow,
+                    expirationDate = DateTime.UtcNow.AddDays(3),
+                    token = Guid.NewGuid().ToString(),
+                    user = user
+                };
+              
+                var dbContext = (AppDbContext)_userRepository; 
+                dbContext.AuthTokens.Add(token);
+                await dbContext.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    Token = token.token,
+                    Expiration = token.expirationDate
+                });
             }
-
-            var _user = _appDbContext.Users.FirstOrDefault(user => user.Email == _authUser.Email);
-            
-            if (_user == null)
+            catch (Exception e)
             {
-                return BadRequest("L'utilisateur n'as pas été trouvé");
+                return BadRequest(e.Message);
             }
-
-            bool validPassword = BCrypt.Net.BCrypt.Verify(_authUser.Password, _user.Password);
-
-            if (!validPassword)
-            {
-                return Unauthorized("Mot de passe ou nom d'utilisateur érroné");
-            }
-
-            var token = new AuthToken
-            {
-                emissionDate = DateTime.UtcNow,
-                expirationDate = DateTime.UtcNow.AddDays(3),
-                token = Guid.NewGuid().ToString(),
-                user = _user,
-            };
-
-            _appDbContext.AuthTokens.Add(token);
-            await _appDbContext.SaveChangesAsync();
-
-            return Ok(token);
         }
+
 
         [HttpPost("create")]
-        public User createUser(UserCreateDTO userDto)
+        public async Task<IActionResult> CreateUser(UserCreateDTO userDto)
         {
-            var user = new User()
+            try
+            {             
+                var user = new User
+                {
+                    Name = userDto.Name,
+                    Email = userDto.Email,
+                    Password = BCrypt.Net.BCrypt.HashPassword(userDto.Password) 
+                };
+                await _userRepository.Create(user);
+
+                return CreatedAtAction(nameof(CreateUser), new { id = user.Id }, user);
+            }
+            catch (Exception e)
             {
-                Name = userDto.Name,
-                Email = userDto.Email,
-                Password = userDto.Password,
-            };
-
-            var hashPassword = BCrypt.Net.BCrypt.HashPassword(userDto.Password);
-            user.Password = hashPassword;
-
-            _appDbContext.Users.Add(user);
-            _appDbContext.SaveChanges();
-
-            return user;
+                return BadRequest(e.Message);
+            }
         }
+
     }
 }
