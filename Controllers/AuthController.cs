@@ -27,28 +27,16 @@ namespace MicroTransation.Controllers
         {
             try
             {
-                
                 if (string.IsNullOrWhiteSpace(_authUser.Email) || string.IsNullOrWhiteSpace(_authUser.Password))
-                {
                     return BadRequest("Renseignez tous les champs.");
-                }
 
-                var user = _userRepository.GetAll()
-                                          .Result
-                                          .FirstOrDefault(u => u.Email == _authUser.Email);
-
+                var user = (await _userRepository.GetAll()).FirstOrDefault(u => u.Email == _authUser.Email);
                 if (user == null)
-                {
                     return BadRequest("L'utilisateur n'a pas été trouvé.");
-                }
 
-                // Vérification du mot de passe
-                bool validPassword = BCrypt.Net.BCrypt.Verify(_authUser.Password, user.Password);
-                if (!validPassword)
-                {
+                if (!BCrypt.Net.BCrypt.Verify(_authUser.Password, user.Password))
                     return Unauthorized("Mot de passe ou nom d'utilisateur erroné.");
-                }
-          
+
                 var token = new AuthToken
                 {
                     emissionDate = DateTime.UtcNow,
@@ -56,23 +44,16 @@ namespace MicroTransation.Controllers
                     token = Guid.NewGuid().ToString(),
                     user = user
                 };
-              
-                var dbContext = (AppDbContext)_userRepository; 
-                dbContext.AuthTokens.Add(token);
-                await dbContext.SaveChangesAsync();
 
-                return Ok(new
-                {
-                    Token = token.token,
-                    Expiration = token.expirationDate
-                });
+                await _userRepository.AddToken(token);
+
+                return Ok(new { emission = token.emissionDate, expiration = token.expirationDate, token = token.token });
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return BadRequest(e.Message);
+                return BadRequest(ex.Message);
             }
         }
-
 
         [HttpPost("create")]
         public async Task<IActionResult> CreateUser(UserCreateDTO userDto)

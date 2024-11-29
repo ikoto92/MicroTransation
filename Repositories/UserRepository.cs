@@ -64,6 +64,20 @@ namespace MicroTransation.Repositories
             }
             catch (Exception ex) { throw new Exception(ex.Message, ex); };
         }
+
+        public async Task AddToken(AuthToken token)
+        {
+            try
+            {
+                await _appDbContext.AuthTokens.AddAsync(token);
+                await _appDbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur lors de l'ajout du token : " + ex.Message, ex);
+            }
+        }
+
     }
 }
 

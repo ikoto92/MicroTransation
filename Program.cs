@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using MicroTransation.Data;
 using MicroTransation.Middleware;
 using MicroTransation.Models;
+using MicroTransation.Repositories;
 using MicroTransation.Services.Mappers;
 
 
@@ -20,7 +21,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddScoped<TokenMappers>();
-builder.Services.AddScoped<User>();
+builder.Services.AddScoped<IRepository<User>, UserRepository>();
 
 
 builder.Services.AddCors(options =>
@@ -49,9 +50,9 @@ app.MapControllers();
 app.UseCors(Origins);
 
 
-//app.UseWhen(context => !context.Request.Path.StartsWithSegments("/auth"), appBuilder =>
-//{
-//    appBuilder.UseMiddleware<AuthMiddleware>();
-//});
+app.UseWhen(context => !context.Request.Path.StartsWithSegments("/auth"), appBuilder =>
+{
+    appBuilder.UseMiddleware<AuthMiddleware>();
+});
 
 app.Run();
