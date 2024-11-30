@@ -21,7 +21,6 @@ namespace MicroTransation.Controllers
             _token = token;
         }
 
-
         [HttpPost("Signin")]
         public async Task<IActionResult> SignIn(UserAuthDTO _authUser)
         {
@@ -45,7 +44,14 @@ namespace MicroTransation.Controllers
                     user = user
                 };
 
-                await _userRepository.AddToken(token);
+                if (_userRepository is ITokenRepository tokenRepository)
+                {
+                    await tokenRepository.AddToken(token);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Le repository ne supporte pas les tokens.");
+                }
 
                 return Ok(new { emission = token.emissionDate, expiration = token.expirationDate, token = token.token });
             }

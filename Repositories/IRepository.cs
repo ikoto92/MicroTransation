@@ -10,8 +10,9 @@ namespace MicroTransation.Repositories
         Task<TEntity> Create(TEntity entity);
         Task<TEntity> Update(TEntity entity);
         Task<TEntity> Delete(TEntity entity);
-
-
+    }
+    public interface ITokenRepository
+    {
         Task AddToken(AuthToken token);
     }
 }

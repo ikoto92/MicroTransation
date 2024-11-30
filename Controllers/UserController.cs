@@ -46,15 +46,27 @@ namespace MicroTransation.Controllers
         }
 
         [HttpPut("Update")]
-        public async Task<IActionResult> UpdateUser(User UpdateUser)
+        public async Task<IActionResult> UpdateUser(UserUpdate userUpdateDto)
         {
             try
             {
-                return Ok(await _userRepository.Update(UpdateUser));
+                var existingUser = await _userRepository.GetById(userUpdateDto.Id);
+
+                if (existingUser == null)
+
+                    return NotFound("User not found");
+               
+                existingUser.Email = userUpdateDto.Email ?? existingUser.Email;
+                existingUser.Name = userUpdateDto.Name ?? existingUser.Name;
+                existingUser.Password = string.IsNullOrEmpty(userUpdateDto.Password)
+                    ? existingUser.Password
+                    : BCrypt.Net.BCrypt.HashPassword(userUpdateDto.Password);
+
+                return Ok(await _userRepository.Update(existingUser));
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest($"An error occurred: {ex.Message}");
             }
         }
 

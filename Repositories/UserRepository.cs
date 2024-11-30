@@ -8,7 +8,7 @@ using System.Numerics;
 
 namespace MicroTransation.Repositories
 {
-    public class UserRepository : IRepository<User>
+    public class UserRepository : IRepository<User>, ITokenRepository
     {
         private readonly AppDbContext _appDbContext;
         private readonly TokenMappers _token;
