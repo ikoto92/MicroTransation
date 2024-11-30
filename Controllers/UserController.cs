@@ -5,9 +5,11 @@ using MicroTransation.DTOs;
 using MicroTransation.Models;
 using MicroTransation.Services.Mappers;
 using MicroTransation.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MicroTransation.Controllers
 {
+    //[Authorize]
     [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase
