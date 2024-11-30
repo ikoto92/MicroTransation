@@ -5,9 +5,11 @@ using MicroTransation.DTOs;
 using MicroTransation.Models;
 using MicroTransation.Services.Mappers;
 using MicroTransation.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MicroTransation.Controllers
 {
+    //[Authorize]
     [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -41,6 +43,34 @@ namespace MicroTransation.Controllers
             }
 
             return Ok(user);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser(User UpdateUser)
+        {
+            try
+            {
+                return Ok(await _userRepository.Update(UpdateUser));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser(User UpdateUser)
+        {
+            try
+            {
+                await _userRepository.Delete(UpdateUser);
+
+                return Ok("Delete done !");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

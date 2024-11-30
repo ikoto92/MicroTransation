@@ -66,6 +66,7 @@ namespace MicroTransation.Controllers
                     Email = userDto.Email,
                     Password = BCrypt.Net.BCrypt.HashPassword(userDto.Password) 
                 };
+
                 await _userRepository.Create(user);
 
                 return CreatedAtAction(nameof(CreateUser), new { id = user.Id }, user);

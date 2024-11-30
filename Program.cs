@@ -50,9 +50,9 @@ app.MapControllers();
 app.UseCors(Origins);
 
 
-app.UseWhen(context => !context.Request.Path.StartsWithSegments("/auth"), appBuilder =>
-{
-    appBuilder.UseMiddleware<AuthMiddleware>();
-});
+//app.UseWhen(context => !context.Request.Path.StartsWithSegments("/auth"), appBuilder =>
+//{
+//    appBuilder.UseMiddleware<AuthMiddleware>();
+//});
 
 app.Run();
