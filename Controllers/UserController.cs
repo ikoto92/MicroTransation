@@ -45,7 +45,7 @@ namespace MicroTransation.Controllers
             return Ok(user);
         }
 
-        [HttpPut]
+        [HttpPut("Update")]
         public async Task<IActionResult> UpdateUser(User UpdateUser)
         {
             try
@@ -58,7 +58,7 @@ namespace MicroTransation.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteUser(User UpdateUser)
         {
             try

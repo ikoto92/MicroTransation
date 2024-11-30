@@ -13,9 +13,20 @@
         public string Password { get; set; }     
     }
     public class UserAuthDTO 
-    { 
-      
+    {      
         public string Email { get;  set; }
+        public string Password { get; set; }
+    }
+    public class UserUpdateName
+    {
+        public string Name { get; set; }
+    }
+    public class UserUpdateEmail
+    {
+        public string Email { get; set; }
+    }
+    public class UserUpdatePassword
+    {
         public string Password { get; set; }
     }
 }
