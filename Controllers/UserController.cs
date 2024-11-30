@@ -58,6 +58,78 @@ namespace MicroTransation.Controllers
             }
         }
 
+        [HttpPut("UpdateName")]
+        public async Task<IActionResult> UpdateUserName(UserUpdateName userUpdateDto)
+        {
+            try
+            {
+                var existingUser = await _userRepository.GetById(userUpdateDto.Id);
+
+                if (existingUser == null)
+                {
+                    return NotFound("User not found");
+                }
+
+                existingUser.Name = userUpdateDto.Name;
+
+                var updatedUser = await _userRepository.Update(existingUser);
+
+                return Ok(updatedUser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"An error occurred: {ex.Message}");
+            }
+        }
+
+        [HttpPut("UpdateEmail")]
+        public async Task<IActionResult> UpdateUserEmail(UserUpdateEmail userUpdateDto)
+        {
+            try
+            {
+                var existingUser = await _userRepository.GetById(userUpdateDto.Id);
+
+                if (existingUser == null)
+                {
+                    return NotFound("User not found");
+                }
+
+                existingUser.Email = userUpdateDto.Email;
+
+                var updatedUser = await _userRepository.Update(existingUser);
+
+                return Ok(updatedUser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"An error occurred: {ex.Message}");
+            }
+        }
+
+        [HttpPut("UpdatePassword")]
+        public async Task<IActionResult> UpdateUserPassword(UserUpdatePassword userUpdateDto)
+        {
+            try
+            {
+                var existingUser = await _userRepository.GetById(userUpdateDto.Id);
+
+                if (existingUser == null)
+                {
+                    return NotFound("User not found");
+                }
+
+                existingUser.Password = BCrypt.Net.BCrypt.HashPassword(userUpdateDto.Password);
+
+                var updatedUser = await _userRepository.Update(existingUser);
+
+                return Ok(updatedUser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"An error occurred: {ex.Message}");
+            }
+        }
+
         [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteUser(User UpdateUser)
         {

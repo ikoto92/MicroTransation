@@ -19,14 +19,17 @@
     }
     public class UserUpdateName
     {
+        public int Id { get; set; }
         public string Name { get; set; }
     }
     public class UserUpdateEmail
     {
+        public int Id { get; set; }
         public string Email { get; set; }
     }
     public class UserUpdatePassword
     {
+        public int Id { get; set; }
         public string Password { get; set; }
     }
 }
