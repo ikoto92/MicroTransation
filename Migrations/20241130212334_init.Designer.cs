@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MicroTransation.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241120090211_init")]
+    [Migration("20241130212334_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -55,8 +55,11 @@ namespace MicroTransation.Migrations
 
             modelBuilder.Entity("MicroTransation.Models.Item", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
