@@ -8,7 +8,6 @@ using System.Numerics;
 
 namespace MicroTransation.Repositories
 {
-    public class ItemsRepository : IRepository<Item>
     {
         private readonly AppDbContext _appDbContext;
 
