@@ -6,6 +6,7 @@ using MicroTransation.Models;
 using MicroTransation.Repositories;
 using static MicroTransation.DTOs.ItemDTO;
 
+
 namespace MicroTransation.Controllers
 {
     [Route("[controller]")]
@@ -20,7 +21,7 @@ namespace MicroTransation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUser()
+        public async Task<ActionResult<IEnumerable<Item>>> GetAllItems()
         {
             return Ok(await _itemRepository.GetAll());
         }
