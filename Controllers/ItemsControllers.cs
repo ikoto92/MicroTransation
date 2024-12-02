@@ -51,7 +51,7 @@ namespace MicroTransation.Controllers
                     Name = ItemDto.Name,
                     Description = ItemDto.Description,
                     price = ItemDto.price,
-                    
+
                 };
 
                 await _itemRepository.Create(item);
@@ -80,11 +80,11 @@ namespace MicroTransation.Controllers
                 if (!string.IsNullOrEmpty(itemUpdateDto.Description))
                     existingItem.Description = itemUpdateDto.Description;
 
-                if (itemUpdateDto.price != 0) 
+                if (itemUpdateDto.price != 0)
                     existingItem.price = itemUpdateDto.price;
 
                 var updatedItem = await _itemRepository.Update(existingItem);
-                
+
                 return Ok(updatedItem);
 
             }
