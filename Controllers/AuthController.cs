@@ -81,6 +81,5 @@ namespace MicroTransation.Controllers
                 return BadRequest(e.Message);
             }
         }
-
     }
 }
