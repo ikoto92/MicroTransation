@@ -21,7 +21,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddScoped<TokenMappers>();
+
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
+builder.Services.AddScoped<IRepository<Item>, ItemsRepository>();
 
 
 builder.Services.AddCors(options =>
