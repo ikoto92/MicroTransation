@@ -8,6 +8,7 @@ using System.Numerics;
 
 namespace MicroTransation.Repositories
 {
+    public class ItemsRepository : IRepository<Item>
     {
         private readonly AppDbContext _appDbContext;
 
@@ -15,7 +16,6 @@ namespace MicroTransation.Repositories
         {
             _appDbContext = appDbContext;
         }
-
         public async Task<Item> GetById(int id)
         {
             return _appDbContext.Items.FirstOrDefault(Item => Item.Id == id);
@@ -24,7 +24,6 @@ namespace MicroTransation.Repositories
         {
             return _appDbContext.Items.ToList();
         }
-
         public async Task<Item> Create(Item item)
         {
             try
@@ -48,7 +47,6 @@ namespace MicroTransation.Repositories
             }
             catch (Exception ex) { throw new Exception(ex.Message, ex); };
         }
-
         public async Task<Item> Delete(Item item)
         {
             try
@@ -60,6 +58,5 @@ namespace MicroTransation.Repositories
             }
             catch (Exception ex) { throw new Exception(ex.Message, ex); };
         }
-
     }
 }

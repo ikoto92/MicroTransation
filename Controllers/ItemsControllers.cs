@@ -10,7 +10,6 @@ namespace MicroTransation.Controllers
     public class ItemsControllers : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
-
         public ItemsControllers(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
@@ -20,7 +19,6 @@ namespace MicroTransation.Controllers
         public IEnumerable<Item> GetAllItem ()
         {
             return _appDbContext.Items;
-        
         }
     }
 }

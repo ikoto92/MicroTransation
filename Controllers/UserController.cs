@@ -34,14 +34,12 @@ namespace MicroTransation.Controllers
             {
                 return BadRequest();
             }
-
             var user = await _userRepository.GetById(id);
 
             if (user == null)
             {
                 return NotFound();
             }
-
             return Ok(user);
         }
 
@@ -60,6 +58,7 @@ namespace MicroTransation.Controllers
                 existingUser.Name = userUpdateDto.Name ?? existingUser.Name;
                 existingUser.Password = string.IsNullOrEmpty(userUpdateDto.Password)
                     ? existingUser.Password
+
                     : BCrypt.Net.BCrypt.HashPassword(userUpdateDto.Password);
 
                 return Ok(await _userRepository.Update(existingUser));

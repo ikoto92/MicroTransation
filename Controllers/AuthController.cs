@@ -52,7 +52,6 @@ namespace MicroTransation.Controllers
                 {
                     throw new InvalidOperationException("Le repository ne supporte pas les tokens.");
                 }
-
                 return Ok(new { emission = token.emissionDate, expiration = token.expirationDate, token = token.token });
             }
             catch (Exception ex)
